@@ -1,0 +1,149 @@
+[
+    {
+        "timestamp": "2026-08-22T23:56:04",
+        "checkpoint": "last_checkpoint.pth",
+        "Generator": "ADM",
+        "Generator ID": 1,
+        "Accuracy": 0.86,
+        "Precision": 0.46981891348088534,
+        "Recall": 0.934,
+        "F1": 0.6251673360107095,
+        "ROC-AUC": 0.9646328571428573,
+        "Confusion Matrix": [
+            [
+                2973,
+                527
+            ],
+            [
+                33,
+                467
+            ]
+        ]
+    },
+    {
+        "timestamp": "2026-08-22T23:56:04",
+        "checkpoint": "last_checkpoint.pth",
+        "Generator": "BigGAN",
+        "Generator ID": 2,
+        "Accuracy": 0.86425,
+        "Precision": 0.47873392680514343,
+        "Recall": 0.968,
+        "F1": 0.6406353408338848,
+        "ROC-AUC": 0.9742525714285715,
+        "Confusion Matrix": [
+            [
+                2973,
+                527
+            ],
+            [
+                16,
+                484
+            ]
+        ]
+    },
+    {
+        "timestamp": "2026-08-22T23:56:04",
+        "checkpoint": "last_checkpoint.pth",
+        "Generator": "GLIDE",
+        "Generator ID": 3,
+        "Accuracy": 0.86225,
+        "Precision": 0.4745762711864407,
+        "Recall": 0.952,
+        "F1": 0.633399866932801,
+        "ROC-AUC": 0.9702922857142858,
+        "Confusion Matrix": [
+            [
+                2973,
+                527
+            ],
+            [
+                24,
+                476
+            ]
+        ]
+    },
+    {
+        "timestamp": "2026-08-22T23:56:04",
+        "checkpoint": "last_checkpoint.pth",
+        "Generator": "Midjourney",
+        "Generator ID": 4,
+        "Accuracy": 0.835,
+        "Precision": 0.4105145413870246,
+        "Recall": 0.734,
+        "F1": 0.5265423242467718,
+        "ROC-AUC": 0.8868491428571429,
+        "Confusion Matrix": [
+            [
+                2973,
+                527
+            ],
+            [
+                133,
+                367
+            ]
+        ]
+    },
+    {
+        "timestamp": "2026-08-22T23:56:04",
+        "checkpoint": "last_checkpoint.pth",
+        "Generator": "SD15",
+        "Generator ID": 6,
+        "Accuracy": 0.8535,
+        "Precision": 0.4555785123966942,
+        "Recall": 0.882,
+        "F1": 0.6008174386920981,
+        "ROC-AUC": 0.9408394285714287,
+        "Confusion Matrix": [
+            [
+                2973,
+                527
+            ],
+            [
+                59,
+                441
+            ]
+        ]
+    },
+    {
+        "timestamp": "2026-08-22T23:56:04",
+        "checkpoint": "last_checkpoint.pth",
+        "Generator": "VQDM",
+        "Generator ID": 7,
+        "Accuracy": 0.841,
+        "Precision": 0.42592592592592593,
+        "Recall": 0.782,
+        "F1": 0.5514809590973202,
+        "ROC-AUC": 0.9006534285714286,
+        "Confusion Matrix": [
+            [
+                2973,
+                527
+            ],
+            [
+                109,
+                391
+            ]
+        ]
+    },
+    {
+        "timestamp": "2026-08-22T23:56:04",
+        "checkpoint": "last_checkpoint.pth",
+        "Generator": "Wukong",
+        "Generator ID": 8,
+        "Accuracy": 0.85125,
+        "Precision": 0.4504692387904067,
+        "Recall": 0.864,
+        "F1": 0.5921864290610007,
+        "ROC-AUC": 0.938112,
+        "Confusion Matrix": [
+            [
+                2973,
+                527
+            ],
+            [
+                68,
+                432
+            ]
+        ]
+    }
+]

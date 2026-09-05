@@ -1,0 +1,149 @@
+[
+    {
+        "timestamp": "2026-08-22T22:46:13",
+        "checkpoint": "resnet_18_ai_detector_best.pth",
+        "Generator": "ADM",
+        "Generator ID": 1,
+        "Accuracy": 0.854,
+        "Precision": 0.4589041095890411,
+        "Recall": 0.938,
+        "F1": 0.6162943495400789,
+        "ROC-AUC": 0.9622205714285714,
+        "Confusion Matrix": [
+            [
+                2947,
+                553
+            ],
+            [
+                31,
+                469
+            ]
+        ]
+    },
+    {
+        "timestamp": "2026-08-22T22:46:13",
+        "checkpoint": "resnet_18_ai_detector_best.pth",
+        "Generator": "BigGAN",
+        "Generator ID": 2,
+        "Accuracy": 0.86025,
+        "Precision": 0.47182425978987586,
+        "Recall": 0.988,
+        "F1": 0.6386554621848739,
+        "ROC-AUC": 0.9787382857142857,
+        "Confusion Matrix": [
+            [
+                2947,
+                553
+            ],
+            [
+                6,
+                494
+            ]
+        ]
+    },
+    {
+        "timestamp": "2026-08-22T22:46:13",
+        "checkpoint": "resnet_18_ai_detector_best.pth",
+        "Generator": "GLIDE",
+        "Generator ID": 3,
+        "Accuracy": 0.85825,
+        "Precision": 0.46775745909528393,
+        "Recall": 0.972,
+        "F1": 0.631578947368421,
+        "ROC-AUC": 0.976872,
+        "Confusion Matrix": [
+            [
+                2947,
+                553
+            ],
+            [
+                14,
+                486
+            ]
+        ]
+    },
+    {
+        "timestamp": "2026-08-22T22:46:13",
+        "checkpoint": "resnet_18_ai_detector_best.pth",
+        "Generator": "Midjourney",
+        "Generator ID": 4,
+        "Accuracy": 0.828,
+        "Precision": 0.39760348583877997,
+        "Recall": 0.73,
+        "F1": 0.5148095909732017,
+        "ROC-AUC": 0.880888,
+        "Confusion Matrix": [
+            [
+                2947,
+                553
+            ],
+            [
+                135,
+                365
+            ]
+        ]
+    },
+    {
+        "timestamp": "2026-08-22T22:46:13",
+        "checkpoint": "resnet_18_ai_detector_best.pth",
+        "Generator": "SD15",
+        "Generator ID": 6,
+        "Accuracy": 0.847,
+        "Precision": 0.44366197183098594,
+        "Recall": 0.882,
+        "F1": 0.5903614457831325,
+        "ROC-AUC": 0.9374674285714285,
+        "Confusion Matrix": [
+            [
+                2947,
+                553
+            ],
+            [
+                59,
+                441
+            ]
+        ]
+    },
+    {
+        "timestamp": "2026-08-22T22:46:13",
+        "checkpoint": "resnet_18_ai_detector_best.pth",
+        "Generator": "VQDM",
+        "Generator ID": 7,
+        "Accuracy": 0.83,
+        "Precision": 0.40280777537796975,
+        "Recall": 0.746,
+        "F1": 0.5231416549789621,
+        "ROC-AUC": 0.8844365714285715,
+        "Confusion Matrix": [
+            [
+                2947,
+                553
+            ],
+            [
+                127,
+                373
+            ]
+        ]
+    },
+    {
+        "timestamp": "2026-08-22T22:46:13",
+        "checkpoint": "resnet_18_ai_detector_best.pth",
+        "Generator": "Wukong",
+        "Generator ID": 8,
+        "Accuracy": 0.84675,
+        "Precision": 0.4431017119838872,
+        "Recall": 0.88,
+        "F1": 0.5894172806430007,
+        "ROC-AUC": 0.9358428571428571,
+        "Confusion Matrix": [
+            [
+                2947,
+                553
+            ],
+            [
+                60,
+                440
+            ]
+        ]
+    }
+]
