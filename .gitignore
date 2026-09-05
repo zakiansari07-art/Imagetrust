@@ -1,4 +1,55 @@
+# Environment
 .env
-.venv
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# PyTorch / ML checkpoints
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+checkpoints/
 notebooks/
-models/checkpoint
+
+
+# Logs
+*.log
+logs/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Build
+build/
+dist/
+*.egg-info/
