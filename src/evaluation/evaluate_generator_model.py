@@ -7,8 +7,8 @@ from sklearn.metrics import (
     f1_score,
     roc_auc_score,
 )
-from data.dataloader import create_generator_dataloader
-from models.detector import create_generator_model
+from data.dataloader_defactify import create_generator_task_eval_dataloader
+from models.detector import create_defactify_generator_model
 import numpy as np
 from datasets import load_dataset
 from collections import Counter
@@ -19,12 +19,13 @@ import json
 
 project_root = Path.cwd()
 
+
 path_name = project_root.parent
 
-model_checkpoint = "gen_model_lr_rate_change_best_validation.pth"
+model_checkpoint = "multi_task_defactify_last_checkpoint.pth"
 
 
-file_name = "gen_model_eval.json"
+file_name = "eval_multitask_last_ch.json"
 
 
 def evaluate_generator_model():
@@ -37,7 +38,7 @@ def evaluate_generator_model():
         print(torch.cuda.get_device_name(0))
 
 
-    model = create_generator_model()
+    model = create_defactify_generator_model()
 
     checkpoint_name = Path(f"models/checkpoint/{model_checkpoint}")
     
@@ -56,23 +57,23 @@ def evaluate_generator_model():
     model.eval()
 
    
-    all_labels = []
+    
     all_predictions = []
     all_probabilities = []
     all_generators = []
 
-    _, validation_dataloader = create_generator_dataloader()
+    validation_dataloader, _ = create_generator_task_eval_dataloader()
 
     # ---------------------------------------------------------
     # Evaluation
     # ---------------------------------------------------------
     with torch.no_grad():
 
-        for images, labels, generators in validation_dataloader:
+        for images, generators in validation_dataloader:
 
             images = images.to(device=device, non_blocking=True)
                          
-            labels = labels.numpy()
+            
             generators = generators.numpy()
            
 
@@ -85,7 +86,7 @@ def evaluate_generator_model():
             
 
             
-            all_labels.extend(labels)
+            
 
             all_probabilities.extend(probabilities.cpu().numpy())
             
@@ -96,41 +97,16 @@ def evaluate_generator_model():
             all_generators.extend(generators)
 
    
-    print("Labels:", len(all_labels))
+    
     print("Predictions:", len(all_predictions))
     print("Probabilities:", len(all_probabilities))
     print("Generators:", len(all_generators))
 
-    # ---------------------------------------------------------
-    # Generator information from Hugging Face dataset
-    # ---------------------------------------------------------
-    hf_dataset = load_dataset(
-        "TheKernel01/Tiny-GenImage"
-    )
-
-    generator_names = (
-        hf_dataset["validation"]
-        .features["generator"].names
-    )
-
-    print("\nGenerator mapping:")
-    print(generator_names)
-
-    generator_counts = Counter(all_generators)
-
-    for generator_id, name in enumerate(
-        generator_names
-    ):
-        print(
-            f"ID {generator_id}: "
-            f"{name} | "
-            f"Count: {generator_counts.get(generator_id, 0)}"
-        )
-
+   
     # ---------------------------------------------------------
     # Convert to numpy arrays once
     # ---------------------------------------------------------
-    all_labels = np.array(all_labels)
+    
     all_predictions = np.array(all_predictions)
     all_probabilities = np.array(all_probabilities)
     all_generators = np.array(all_generators)
@@ -141,7 +117,7 @@ def evaluate_generator_model():
         # ---------------------------------------------------------
         # Create evaluation result directory
         # ---------------------------------------------------------
-    results_dir = Path("src/evaluation/evaluation_results_generator_model")
+    results_dir = Path("src/evaluation/evaluation_results")
     
     dir_name = (
             f"{checkpoint_name.stem}_"
@@ -151,33 +127,16 @@ def evaluate_generator_model():
     file_dir = results_dir / dir_name
     file_dir.mkdir(parents=True, exist_ok=True)
 
-    
+    generator_names = ["SD21", "SDXL", "SD3", "DALLE3", "Midjourney"]
     results = []
 
     for generator_id, generator_name in enumerate(
         generator_names
     ):
 
-        # Skip the real class: 0
-        if generator_id == 0:
-            continue
-        # Skip classes not in the dataset (SD14)
-        if not np.any(generator_id == all_generators):
-            continue
 
-     
-
-        #Select real and generaotor images
-        mask = (all_generators == 0) | (all_generators == generator_id)
-        
-
-        labels = all_labels[mask]
-        predictions = all_predictions[mask] 
-        
-        generators = all_generators[mask]
-
-        binary_predictions = (predictions == generator_id).astype(int)
-        binary_generators = (generators == generator_id).astype(int)
+        binary_predictions = (all_predictions == generator_id).astype(int)
+        binary_generators = (all_generators == generator_id).astype(int)
 
         binary_probabilities = all_probabilities[mask, generator_id]
 
@@ -223,7 +182,7 @@ def evaluate_generator_model():
         cm = confusion_matrix(
             binary_generators,
             binary_predictions,
-            labels=[0, 1]
+            labels=[f"{generator_name}", "other_generators"]
         )
 
         # -----------------------------------------------------

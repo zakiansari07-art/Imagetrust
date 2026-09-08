@@ -1,0 +1,22 @@
+{
+    "timestamp": "2026-09-09T01:06:40",
+    "checkpoint": "models/checkpoint/bin_task_defactify_best_validation.pth",
+    "device": "cuda",
+    "threshold": 0.5,
+    "num_samples": 9000,
+    "accuracy": 0.9623333333333334,
+    "precision": 0.9828725556304787,
+    "recall": 0.9717333333333333,
+    "f1": 0.977271203486423,
+    "roc_auc": 0.9892657777777778,
+    "confusion_matrix": [
+        [
+            1373,
+            127
+        ],
+        [
+            212,
+            7288
+        ]
+    ]
+}

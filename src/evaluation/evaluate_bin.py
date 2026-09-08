@@ -14,12 +14,11 @@ from sklearn.metrics import (
     roc_auc_score,
     classification_report,
 )
-
-from data.dataloader import create_dataloader
+from data.dataloader_defactify import create_binary_task_eval_dataloader
 from models.detector import create_model
 
 
-CHECKPOINT_NAME = "models/checkpoint/last_checkpoint.pth"
+CHECKPOINT_NAME = "models/checkpoint/bin_task_defactify_best_validation.pth"
 
 RESULTS_DIR = Path(
     "src/evaluation/evaluation_results"
@@ -30,7 +29,7 @@ RESULTS_DIR.mkdir(
     exist_ok=True
 )
 
-HISTORY_FILE = RESULTS_DIR / "evaluation_history.csv"
+HISTORY_FILE = RESULTS_DIR / "evaluation_history_defactify.csv"
 
 
 def evaluate():
@@ -73,7 +72,7 @@ def evaluate():
     # 3. Create validation dataloader
     # ---------------------------------------------------------
 
-    _, validation_dataloader = create_dataloader()
+    validation_dataloader, _ = create_binary_task_eval_dataloader()
 
     # ---------------------------------------------------------
     # 4. Store predictions

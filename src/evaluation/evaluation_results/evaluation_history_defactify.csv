@@ -1,0 +1,2 @@
+timestamp,checkpoint,device,threshold,num_samples,accuracy,precision,recall,f1,roc_auc
+2026-09-09T01:06:40,models/checkpoint/bin_task_defactify_best_validation.pth,cuda,0.5,9000,0.9623333333333334,0.9828725556304787,0.9717333333333333,0.977271203486423,0.9892657777777778
