@@ -1,21 +1,17 @@
 from app.models.forensics_analyzer import ImageForensicsAnalyzer
 from app.models.generator_attributor import GeneratorAttributor
 from app.models.real_ai_detector import RealAIDetector
-from app.workflows.analysis_graph import build_analysis_graph
 from app.models.llm import ReportGenerator
-from app.schemas.predictions import (
-    AnalysisResult,
-    ForensicsReport,
-    ModelPrediction,
-)
+from app.schemas.predictions import AnalysisResult
+from app.workflows.analysis_graph import build_analysis_graph
 
 
 class AnalysisService:
     """
     ImageTrust's central analysis engine.
 
-    It coordinates the models and turns their raw outputs into one safe,
-    user-facing conclusion.
+    It coordinates the models and turns their raw outputs
+    into one safe, user-facing conclusion.
     """
 
     def __init__(
@@ -25,22 +21,40 @@ class AnalysisService:
         ai_threshold: float = 0.70,
         source_threshold: float = 0.60,
     ):
+        # Load ML models once.
         self.detector = RealAIDetector(detector_checkpoint_path)
         self.attributor = GeneratorAttributor(attributor_checkpoint_path)
+
+        # Traditional forensic analysis does not require a checkpoint.
         self.forensics = ImageForensicsAnalyzer()
 
-        # Starting thresholds. We will tune these using evaluation data later.
+        # Thresholds used by the deterministic decision engine.
         self.ai_threshold = ai_threshold
         self.source_threshold = source_threshold
+
+        # LLM is used for explanation/report generation,
+        # not for making the final verdict.
         self.llm = ReportGenerator()
 
-        self.graph = build_analysis_graph(detector=self.detector, 
-                                          attributor=self.attributor, 
-                                          forensics=self.forensics, 
-                                          llm=self.llm, 
-                                          ai_threshold=self.ai_threshold,
-                                          source_threshold=self.source_threshold)
+        # Build the LangGraph workflow once.
+        self.graph = build_analysis_graph(
+            detector=self.detector,
+            attributor=self.attributor,
+            forensics=self.forensics,
+            llm=self.llm,
+            ai_threshold=self.ai_threshold,
+            source_threshold=self.source_threshold,
+        )
 
     def analyze(self, image_path: str) -> AnalysisResult:
-       final_state = self.graph.invoke({"image_path": image_path})
-       return final_state["result"]
+        """
+        Analyze a single image through the complete ImageTrust pipeline.
+        """
+
+        final_state = self.graph.invoke(
+            {
+                "image_path": image_path
+            }
+        )
+
+        return final_state["result"]

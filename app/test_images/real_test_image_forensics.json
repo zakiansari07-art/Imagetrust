@@ -1,0 +1,122 @@
+{
+    "file": {
+        "file_name": "real_test_image.png",
+        "file_size_bytes": 3784243,
+        "file_format": "PNG"
+    },
+    "image": {
+        "width": 1920,
+        "height": 1080,
+        "channels": 3,
+        "aspect_ratio": 1.7778
+    },
+    "metadata": {
+        "original_color_mode": "RGB",
+        "has_exif_metadata": true,
+        "exif": {
+            "ResolutionUnit": "2",
+            "ExifOffset": "102",
+            "Orientation": "1",
+            "YCbCrPositioning": "1",
+            "XResolution": "96.0",
+            "YResolution": "96.0"
+        }
+    },
+    "color": {
+        "mean_rgb": [
+            43.01,
+            41.14,
+            34.04
+        ],
+        "std_rgb": [
+            42.24,
+            39.5,
+            39.11
+        ],
+        "mean_saturation": 116.15,
+        "mean_brightness": 48.59
+    },
+    "quality": {
+        "sharpness_score": 204.48,
+        "blur_score": 204.48,
+        "contrast": 39.32,
+        "entropy": 6.6043
+    },
+    "noise": {
+        "noise_mean": 0.0249,
+        "noise_std": 4.613,
+        "noise_median": 0.0,
+        "noise_mad": 1.0,
+        "noise_spatial_std": 4.1338
+    },
+    "edges": {
+        "edge_density": 0.041116,
+        "edge_mean": 10.4846
+    },
+    "frequency": {
+        "low_frequency_energy": 168167374848.0,
+        "high_frequency_energy": 239908368.0,
+        "high_frequency_ratio": 0.074833
+    },
+    "compression": {
+        "jpeg_detected": false,
+        "estimated_jpeg_quality": null,
+        "block_artifact_score": 0.961044,
+        "dct": {
+            "mean_low_frequency_dct_energy": 10009.9521,
+            "mean_high_frequency_dct_energy": 41.2465,
+            "high_frequency_dct_ratio": 0.004121
+        }
+    },
+    "ela": {
+        "applicable": false,
+        "mean_error": null,
+        "std_error": null,
+        "max_error": null
+    },
+    "resampling": {
+        "resampling_score": 4.684,
+        "interpolation_error": 1.6348
+    },
+    "double_compression": {
+        "applicable": false,
+        "double_compression_indicator": false,
+        "score": null
+    },
+    "resizing": {
+        "common_dimension_detected": true,
+        "reconstruction_error": 1.6348
+    },
+    "provenance": {
+        "exif": {
+            "present": true,
+            "fields": {
+                "ResolutionUnit": "2",
+                "ExifOffset": "102",
+                "Orientation": "1",
+                "YCbCrPositioning": "1",
+                "XResolution": "96.0",
+                "YResolution": "96.0"
+            },
+            "camera": {
+                "make": null,
+                "model": null,
+                "software": null,
+                "date_time": null
+            }
+        },
+        "xmp": {
+            "present": true,
+            "fields": {
+                "creator_tool": "Canva doc=DAHAZN_n5ds user=UAEohKpCNlM brand=BAEohHzRK7s"
+            }
+        },
+        "c2pa": {
+            "available": true,
+            "present": false,
+            "verified": false,
+            "analysis_error": true,
+            "error": "ManifestNotFound: no JUMBF data found"
+        }
+    }
+}

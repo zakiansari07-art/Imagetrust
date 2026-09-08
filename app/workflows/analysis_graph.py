@@ -171,17 +171,85 @@ def build_analysis_graph(
 
     workflow = StateGraph(ImageAnalysisState)
 
-    workflow.add_node("detect_real_vs_ai", detect_real_vs_ai)
-    workflow.add_node("attribute_generator", attribute_generator)
-    workflow.add_node("analyze_forensics", analyze_forensics)
-    workflow.add_node("decide_result", decide_result)
-    workflow.add_node("report", generate_report)
+    workflow.add_node(
+        "detect_real_vs_ai",
+        detect_real_vs_ai
+    )
 
-    workflow.add_edge(START, "detect_real_vs_ai")
-    workflow.add_edge("detect_real_vs_ai", "attribute_generator")
-    workflow.add_edge("attribute_generator", "analyze_forensics")
-    workflow.add_edge("analyze_forensics", "decide_result")
-    workflow.add_edge("decide_result", "report")
-    workflow.add_edge("report", END)
+    workflow.add_node(
+        "attribute_generator",
+        attribute_generator
+    )
+
+    workflow.add_node(
+        "analyze_forensics",
+        analyze_forensics
+    )
+
+    workflow.add_node(
+        "decide_result",
+        decide_result
+    )
+
+    workflow.add_node(
+        "report",
+        generate_report
+    )
+
+
+    # ------------------------------------------------------------
+    # START
+    # ------------------------------------------------------------
+
+    workflow.add_edge(
+        START,
+        "detect_real_vs_ai"
+    )
+
+    workflow.add_edge(
+        START,
+        "attribute_generator"
+    )
+
+    workflow.add_edge(
+        START,
+        "analyze_forensics"
+    )
+
+
+    # ------------------------------------------------------------
+    # ALL THREE → DECISION
+    # ------------------------------------------------------------
+
+    workflow.add_edge(
+        "detect_real_vs_ai",
+        "decide_result"
+    )
+
+    workflow.add_edge(
+        "attribute_generator",
+        "decide_result"
+    )
+
+    workflow.add_edge(
+        "analyze_forensics",
+        "decide_result"
+    )
+
+
+    # ------------------------------------------------------------
+    # DECISION → LLM
+    # ------------------------------------------------------------
+
+    workflow.add_edge(
+        "decide_result",
+        "report"
+    )
+
+    workflow.add_edge(
+        "report",
+        END
+    )
+
 
     return workflow.compile()
