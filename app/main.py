@@ -13,7 +13,7 @@ from app.configs.config import (
 from app.schemas.predictions import AnalysisResult
 from app.services.analysis_service import AnalysisService
 from app.repositories.analysis_repository import AnalysisRepository
-from app.database import SessionLocal
+from app.database.database import SessionLocal
 
 from sqlalchemy.exc import SQLAlchemyError
 

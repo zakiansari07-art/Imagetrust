@@ -1,5 +1,5 @@
 from app.schemas.predictions import AnalysisResult
-from app.db_models import AnalysisRecord
+from app.database.db_models import AnalysisRecord
 from sqlalchemy.orm import Session
 
 
