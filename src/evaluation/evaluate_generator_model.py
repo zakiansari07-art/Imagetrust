@@ -10,22 +10,20 @@ from sklearn.metrics import (
 from data.dataloader_defactify import create_generator_task_eval_dataloader
 from models.detector import create_defactify_generator_model
 import numpy as np
-from datasets import load_dataset
-from collections import Counter
 from pathlib import Path
 from datetime import datetime
 import json
-
+from tqdm import tqdm
 
 project_root = Path.cwd()
 
 
 path_name = project_root.parent
 
-model_checkpoint = "multi_task_defactify_last_checkpoint.pth"
+model_checkpoint = "multi_task_defactify_best_validation.pth"
 
 
-file_name = "eval_multitask_last_ch.json"
+file_name = "val_eval_multitask_last_ch.json"
 
 
 def evaluate_generator_model():
@@ -62,14 +60,14 @@ def evaluate_generator_model():
     all_probabilities = []
     all_generators = []
 
-    validation_dataloader, _ = create_generator_task_eval_dataloader()
+    validation_dataloader, test_dataloader = create_generator_task_eval_dataloader()
 
     # ---------------------------------------------------------
     # Evaluation
     # ---------------------------------------------------------
     with torch.no_grad():
 
-        for images, generators in validation_dataloader:
+        for images, generators in tqdm(validation_dataloader):
 
             images = images.to(device=device, non_blocking=True)
                          
@@ -133,12 +131,12 @@ def evaluate_generator_model():
     for generator_id, generator_name in enumerate(
         generator_names
     ):
-
+        
 
         binary_predictions = (all_predictions == generator_id).astype(int)
         binary_generators = (all_generators == generator_id).astype(int)
 
-        binary_probabilities = all_probabilities[mask, generator_id]
+        generators_probabilities = all_probabilities[:, generator_id]
 
       
         accuracy = accuracy_score(
@@ -169,7 +167,7 @@ def evaluate_generator_model():
 
             roc_auc = roc_auc_score(
                 binary_generators,
-                binary_probabilities
+                generators_probabilities
             )
 
         else:
@@ -182,7 +180,7 @@ def evaluate_generator_model():
         cm = confusion_matrix(
             binary_generators,
             binary_predictions,
-            labels=[f"{generator_name}", "other_generators"]
+            labels=[0, 1]
         )
 
         # -----------------------------------------------------

@@ -72,7 +72,7 @@ def evaluate():
     # 3. Create validation dataloader
     # ---------------------------------------------------------
 
-    validation_dataloader, _ = create_binary_task_eval_dataloader()
+    validation_dataloader, test_dataloader = create_binary_task_eval_dataloader()
 
     # ---------------------------------------------------------
     # 4. Store predictions
@@ -90,7 +90,7 @@ def evaluate():
 
     with torch.no_grad():
 
-        for images, labels in validation_dataloader:
+        for images, labels in test_dataloader:
 
             images = images.to(device)
 
