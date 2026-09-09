@@ -12,8 +12,6 @@ langchain-openai
 PIL
 sklearn
 cv2
-psycopg2-binary
-fastapi
 uvicorn[standard]
 python-multipart
 sqlalchemy
