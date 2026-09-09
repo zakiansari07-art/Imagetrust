@@ -14,7 +14,8 @@ from app.schemas.predictions import AnalysisResult
 from app.services.analysis_service import AnalysisService
 from app.repositories.analysis_repository import AnalysisRepository
 from app.database.database import SessionLocal
-
+from app.frontend.gradio_ui import demo
+import gradio as gr
 from sqlalchemy.exc import SQLAlchemyError
 
 
@@ -85,7 +86,7 @@ def analyze_image(file: UploadFile = File(...)):
         db.rollback()
         raise HTTPException(status_code=500, detail="Analysis complete, but could not be saved in the database") from error 
 
-
+    
 
     finally:
         db.close()
@@ -93,3 +94,5 @@ def analyze_image(file: UploadFile = File(...)):
 
         if temp_path and temp_path.exists():
             temp_path.unlink()
+
+app = gr.mount_gradio_app(app, demo, path="/")

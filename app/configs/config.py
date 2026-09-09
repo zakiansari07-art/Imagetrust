@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+print(PROJECT_ROOT)
 
 load_dotenv(PROJECT_ROOT / ".env")
 

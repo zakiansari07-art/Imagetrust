@@ -5,7 +5,7 @@ import gradio as gr
 import requests
 
 
-API_URL = "http://127.0.0.1:8000/analyze"
+API_URL = "http://127.0.0.1:7860/analyze"
 
 
 def analyze_uploaded_image(image_path: str):
@@ -247,9 +247,3 @@ Converts the structured analysis into an understandable report.
     )
 
 
-# =============================================================
-# MAIN
-# =============================================================
-
-if __name__ == "__main__":
-    demo.launch(share=True)
