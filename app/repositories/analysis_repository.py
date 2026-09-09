@@ -13,8 +13,8 @@ class AnalysisRepository:
             image_file_name=image_file_name,
             verdict=result.verdict,
             confidence=result.confidence,
-            source_status = result.source_status,
             likely_generator = result.likely_generator,
+            confidence_level = result.confidence_level,
             generator_confidence=  result.generator_confidence,
             result_json = result.model_dump(mode="json")
         )

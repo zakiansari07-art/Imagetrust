@@ -10,14 +10,16 @@ from pydantic import BaseModel, Field
 Verdict = Literal[
     "likely_real",
     "likely_ai_generated",
-    "uncertain",
 ]
 
-SourceStatus = Literal[
-    "identified",
-    "unknown",
-    "not_applicable",
+ConfidenceLevel = Literal[
+    "Very_High",
+    "High",
+    "Medium",
+    "Low",
+    "not_applicable"
 ]
+
 
 
 # ============================================================
@@ -25,7 +27,7 @@ SourceStatus = Literal[
 # ============================================================
 
 class ModelPrediction(BaseModel):
-    label: str
+    label: str | None
     confidence: float = Field(ge=0, le=1)
     probabilities: dict[str, float]
     model_name: str
@@ -301,7 +303,7 @@ class AnalysisResult(BaseModel):
         le=1
     )
 
-    source_status: SourceStatus
+    confidence_level: ConfidenceLevel
 
     likely_generator: str | None = None
 

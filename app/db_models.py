@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 class AnalysisRecord(Base):
-    __tablename__ = "analysis"
+    __tablename__ = "new_record"
 
     id : Mapped[int] = mapped_column(primary_key= True)
 
@@ -19,7 +19,7 @@ class AnalysisRecord(Base):
 
     confidence : Mapped[float | None] = mapped_column(Float, nullable=True)
 
-    source_status : Mapped[str] = mapped_column(String(50), nullable=False)
+    confidence_level : Mapped[str] = mapped_column(String(50), nullable=False)
 
     likely_generator: Mapped[str | None] = mapped_column(String(50), nullable=True)
 

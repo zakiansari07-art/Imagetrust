@@ -43,7 +43,7 @@ class RealAIDetector:
             ),
         ])
 
-    def predict(self, image_path: str) -> dict:
+    def predict(self, image_path: str ) -> dict:
         """Return a clear, app-friendly prediction for one image."""
         path = Path(image_path)
         if not path.exists():
@@ -57,15 +57,11 @@ class RealAIDetector:
 
         real_probability = 1 - ai_probability
 
-        if ai_probability >= 0.5:
-            label = "ai_generated"
-            confidence = ai_probability
-        else:
-            label = "real"
-            confidence = real_probability
+        
+        confidence = max(ai_probability, real_probability)
 
         return {
-            "label": label,
+            "label": None,
             "confidence": round(confidence, 4),
             "probabilities": {
                 "real": round(real_probability, 4),

@@ -35,74 +35,206 @@ def analyze_uploaded_image(image_path: str):
         result = response.json()
 
     except requests.RequestException as error:
-        return f"## Analysis unavailable\n\n{error}", {}, {}
+        return (
+            f"## Analysis Unavailable\n\n"
+            f"> {error}",
+            {},
+            {},
+        )
+
+    # ---------------------------------------------------------
+    # RESULT DATA
+    # ---------------------------------------------------------
 
     verdict = result["verdict"].replace("_", " ").title()
-    confidence = result["confidence"]
 
-    summary = f"## {verdict}\n\n{result['explanation']}"
+    confidence = result.get("confidence")
+    confidence_level = result.get("confidence_level")
 
-    if confidence is not None:
-        summary += f"\n\n**Detection confidence:** {confidence:.1%}"
 
-    if result["verdict"] == "likely_ai_generated":
-        if result["source_status"] == "identified":
-            summary += (
-                f"\n\n**Likely source:** {result['likely_generator']} "
-                f"({result['generator_confidence']:.1%})"
-            )
-        else:
-            summary += (
-                "\n\n**Likely source:** Unknown or unsupported generator"
-            )
+    explanation = result.get(
+        "explanation",
+        "No explanation was provided.",
+    )
+
+    likely_generator = result.get("likely_generator")
+    generator_confidence = result.get("generator_confidence")
+    
 
     llm_report = result.get("llm_report")
 
-    if llm_report:
-        summary += f"\n\n---\n\n## Plain-English report\n\n{llm_report}"
+    # ---------------------------------------------------------
+    # VERDICT
+    # ---------------------------------------------------------
+
+    if result["verdict"] == "likely_ai_generated":
+        verdict_icon = "⚠️"
+
     else:
-        summary += (
-            "\n\n---\n\n*The structured analysis completed, but the "
-            "plain-English report was unavailable.*"
-        )
+        result["verdict"] == "likely_real"
+        verdict_icon = "✓"
+
+   
+
+    # ---------------------------------------------------------
+    # MAIN REPORT
+    # ---------------------------------------------------------
+
+    final_report = f"""
+# Analysis Result
+
+## {verdict_icon} {verdict}
+
+> {explanation}
+
+---
+
+## Analysis Summary
+
+| Analysis | Result |
+|---|---|
+| **AI Detection** | **{verdict}** |
+| **Detection Confidence** | **{confidence}** |
+| **Confidence Level** | **{confidence_level}** |
+| **Likely Generator** | **{likely_generator}** |
+| **Generator Confidence** | **{generator_confidence}** |
+
+---
+
+{llm_report if llm_report else "_Report is unavailable._"}
+"""
+
+    # ---------------------------------------------------------
+    # MODEL OUTPUT
+    # ---------------------------------------------------------
 
     model_results = {
-        "real_vs_ai": result["real_vs_ai"],
-        "generator_attribution": result["generator_attribution"],
+        "real_vs_ai": result.get("real_vs_ai"),
+        "generator_attribution": result.get(
+            "generator_attribution"
+        ),
     }
 
-    return summary, model_results, result["forensics"]
+    # ---------------------------------------------------------
+    # RETURN
+    # ---------------------------------------------------------
 
-
-with gr.Blocks(title="ImageTrust") as demo:
-    gr.Markdown(
-        "# ImageTrust\n"
-        "Upload an image to check whether it is likely real or AI-generated."
+    return (
+        final_report,
+        model_results,
+        result.get("forensics", {}),
     )
 
+
+# =============================================================
+# GRADIO APPLICATION
+# =============================================================
+
+
+
+with gr.Blocks(title="ImageTrust", theme=gr.themes.Default(primary_hue="emerald", secondary_hue="stone", neutral_hue="gray")) as demo:
+
+    # ---------------------------------------------------------
+    # HEADER
+    # ---------------------------------------------------------
+
+    gr.Markdown(
+        """
+# ImageTrust
+
+**AI Image Authenticity & Attribution**
+
+Analyze an image for AI-generation signals, identify the
+likely generation source when sufficient evidence exists,
+and inspect technical forensic information.
+"""
+    )
+
+    gr.Markdown("---")
+
+    # ---------------------------------------------------------
+    # IMAGE INPUT
+    # ---------------------------------------------------------
+
+    gr.Markdown("## Analyze an Image")
+
     with gr.Row(equal_height=True):
-        image_input = gr.Image(
-            type="filepath",
-            label="Upload image",
+
+        with gr.Column():
+            image_input = gr.Image(
+                type="filepath",
+                label="Upload Image",
+            )
+
+        with gr.Column():
+            gr.Markdown(
+                """
+### What ImageTrust checks ?""")
+            gr.Markdown("---")
+
+            gr.Markdown("""
+
+**Real vs AI Detection**  
+Determines whether the image is likely real or AI-generated.
+
+**Generator Attribution**  
+If the image appears AI-generated, estimates the most likely
+supported generator.
+
+**Image Forensics**  
+Examines technical properties and available image metadata.
+
+**Generates Report**  
+Converts the structured analysis into an understandable report.
+"""
+            )
+
+    analyze_button = gr.Button(
+        "Analyze Image",
+        variant="primary",
+    )
+
+    gr.Markdown("---")
+
+    # ---------------------------------------------------------
+    # ANALYSIS RESULT
+    # ---------------------------------------------------------
+
+    gr.Markdown("## Analysis Result")
+
+    report_output = gr.Markdown(
+        value=(
+            "Upload an image and click **Analyze Image** "
+            "to begin."
+        ),
+        container=True,
+    )
+
+    # ---------------------------------------------------------
+    # TECHNICAL DETAILS
+    # ---------------------------------------------------------
+
+    gr.Markdown("---")
+
+    with gr.Accordion(
+        "Model Analysis Json",
+        open=False,
+    ):
+        model_output = gr.JSON(
+            label="Detector and Generator Attribution"
         )
 
-        
-
-        report_output = gr.Textbox(label="Report", interactive=False,)
-                            
-    with gr.Row():             
-        analyze_button = gr.Button(
-            "Analyze",
-            variant="primary",
-        )
-
-            
-
-    with gr.Row():
-        model_output = gr.JSON(label="Model results")
+    with gr.Accordion(
+        "Forensic Evaluation Json",
+        open=False,
+    ):
         forensics_output = gr.JSON(
-            label="Technical image details",
+            label="Technical Image Details",
         )
+
+    # ---------------------------------------------------------
+    # BUTTON EVENT
+    # ---------------------------------------------------------
 
     analyze_button.click(
         fn=analyze_uploaded_image,
@@ -115,5 +247,9 @@ with gr.Blocks(title="ImageTrust") as demo:
     )
 
 
+# =============================================================
+# MAIN
+# =============================================================
+
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(share=True)

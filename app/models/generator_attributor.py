@@ -4,20 +4,11 @@ import torch
 from PIL import Image
 from torchvision import transforms
 
-from models.detector import create_generator_model
+from models.detector import create_defactify_generator_model
 
 
-GENERATOR_LABELS = [
-    "real",
-    "ADM",
-    "BigGAN",
-    "GLIDE",
-    "Midjourney",
-    "SD14",
-    "SD15",
-    "VQDM",
-    "Wukong",
-]
+GENERATOR_LABELS  = ["SD21", "SDXL", "SD3", "DALLE3", "Midjourney"]
+
 
 
 class GeneratorAttributor:
@@ -33,7 +24,7 @@ class GeneratorAttributor:
             "cuda" if torch.cuda.is_available() else "cpu"
         )
 
-        self.model = create_generator_model()
+        self.model = create_defactify_generator_model()
 
         checkpoint = torch.load(
             checkpoint_path,
