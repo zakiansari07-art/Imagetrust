@@ -27,8 +27,10 @@ class RealAIDetector:
         checkpoint = torch.load(
             checkpoint_path,
             map_location=self.device,
+            weights_only=True
         )
         self.model.load_state_dict(checkpoint["model_state_dict"])
+        del checkpoint
 
         self.model.to(self.device)
         self.model.eval()  # inference mode: no training behaviour
@@ -51,7 +53,7 @@ class RealAIDetector:
         image = Image.open(image_path).convert("RGB")
         image_tensor = self.transform(image).unsqueeze(0).to(self.device)
 
-        with torch.no_grad():
+        with torch.inference_mode():
             logit = self.model(image_tensor).squeeze()
             ai_probability = torch.sigmoid(logit).item()
 
@@ -59,6 +61,7 @@ class RealAIDetector:
 
         
         confidence = max(ai_probability, real_probability)
+        del image_tensor
 
         return {
             "label": None,
