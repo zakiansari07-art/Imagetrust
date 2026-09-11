@@ -1,5 +1,5 @@
 import shutil
-import traceback
+
 import tempfile
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -15,25 +15,31 @@ from app.configs.config import (
 from app.schemas.predictions import AnalysisResult
 from app.services.analysis_service import AnalysisService
 from app.repositories.analysis_repository import AnalysisRepository
+from app.database.database import Base, engine
+ 
 from app.database.database import SessionLocal
 from app.frontend.gradio_ui import demo
 import gradio as gr
 from sqlalchemy.exc import SQLAlchemyError
-import logging
 
-logger = logging.getLogger(__name__)
+
+
 
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    
+    
+    
     # Models load once when the API starts—not for every uploaded image.
     app.state.analysis_service = AnalysisService(
         detector_checkpoint_path=str(DETECTOR_CHECKPOINT_PATH),
-        attributor_checkpoint_path=str(ATTRIBUTOR_CHECKPOINT_PATH),
+        attributor_checkpoint_path=str(ATTRIBUTOR_CHECKPOINT_PATH))
 
+    Base.metadata.create_all(bind=engine)
   
-    )
+    
     yield
 
 
@@ -104,13 +110,7 @@ def analyze_image(file: UploadFile = File(...)):
             detail=f"Database error: {error}",
         ) from error
 
-    except Exception as error:
-        logger.exception("ANALYZE FAILED")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Analysis failed: {error}",
-        ) from error
-
+  
     finally:
         db.close()
         file.file.close()
