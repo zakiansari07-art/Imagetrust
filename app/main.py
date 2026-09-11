@@ -1,4 +1,5 @@
 import shutil
+import traceback
 import tempfile
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -86,7 +87,12 @@ def analyze_image(file: UploadFile = File(...)):
         db.rollback()
         raise HTTPException(status_code=500, detail="Analysis complete, but could not be saved in the database") from error 
 
-    
+    except Exception as error:
+        traceback.print_exc()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Analysis failed: {error}",
+        ) from error
 
     finally:
         db.close()
