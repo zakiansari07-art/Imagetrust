@@ -97,7 +97,12 @@ def analyze_image(file: UploadFile = File(...)):
 
     except SQLAlchemyError as error:
         db.rollback()
-        raise HTTPException(status_code=500, detail="Analysis complete, but could not be saved in the database") from error 
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Database error: {error}",
+        ) from error
 
     except Exception as error:
         logger.exception("ANALYZE FAILED")
