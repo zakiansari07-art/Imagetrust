@@ -169,10 +169,7 @@ and inspect technical forensic information.
         with gr.Column():
             gr.Markdown(
                 """
-### What ImageTrust checks ?""")
-            gr.Markdown("---")
-
-            gr.Markdown("""
+### What ImageTrust checks ?)
 
 **Real vs AI Detection**  
 Determines whether the image is likely real or AI-generated.
