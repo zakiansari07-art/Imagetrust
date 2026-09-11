@@ -95,7 +95,6 @@ def analyze_uploaded_image(image_path: str):
 |---|---|
 | **AI Detection** | **{verdict}** |
 | **Detection Confidence** | **{confidence}** |
-| **Confidence Level** | **{confidence_level}** |
 | **Likely Generator** | **{likely_generator}** |
 | **Generator Confidence** | **{generator_confidence}** |
 
