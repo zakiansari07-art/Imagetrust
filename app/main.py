@@ -18,6 +18,9 @@ from app.database.database import SessionLocal
 from app.frontend.gradio_ui import demo
 import gradio as gr
 from sqlalchemy.exc import SQLAlchemyError
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -88,7 +91,7 @@ def analyze_image(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail="Analysis complete, but could not be saved in the database") from error 
 
     except Exception as error:
-        traceback.print_exc()
+        logger.exception("ANALYZE FAILED")
         raise HTTPException(
             status_code=500,
             detail=f"Analysis failed: {error}",
