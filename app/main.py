@@ -3,6 +3,7 @@ import traceback
 import tempfile
 from contextlib import asynccontextmanager
 from pathlib import Path
+from fastapi.responses import JSONResponse
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from PIL import UnidentifiedImageError
@@ -43,6 +44,14 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    logger.exception("UNHANDLED ERROR on %s %s", request.method, request.url.path)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"},
+    )
 
 @app.get("/health")
 def health_check():
