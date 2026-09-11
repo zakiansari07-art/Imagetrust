@@ -1,5 +1,5 @@
 import shutil
-
+import traceback
 import tempfile
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -21,14 +21,15 @@ from app.database.database import SessionLocal
 from app.frontend.gradio_ui import demo
 import gradio as gr
 from sqlalchemy.exc import SQLAlchemyError
+import logging
 
-
-
+logger = logging.getLogger(__name__)
 
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    
     
     
     # Models load once when the API starts—not for every uploaded image.
@@ -50,6 +51,13 @@ app = FastAPI(
 )
 
 
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    logger.exception("UNHANDLED ERROR on %s %s", request.method, request.url.path)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"},
+    )
 
 @app.get("/health")
 def health_check():
@@ -102,7 +110,13 @@ def analyze_image(file: UploadFile = File(...)):
             detail=f"Database error: {error}",
         ) from error
 
-  
+    except Exception as error:
+        logger.exception("ANALYZE FAILED")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Analysis failed: {error}",
+        ) from error
+
     finally:
         db.close()
         file.file.close()
