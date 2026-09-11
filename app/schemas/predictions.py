@@ -17,6 +17,7 @@ ConfidenceLevel = Literal[
     "High",
     "Medium",
     "Low",
+    "Very_Low",
     "not_applicable"
 ]
 
