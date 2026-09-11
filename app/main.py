@@ -31,7 +31,6 @@ from sqlalchemy.exc import SQLAlchemyError
 async def lifespan(app: FastAPI):
     
     
-    
     # Models load once when the API starts—not for every uploaded image.
     app.state.analysis_service = AnalysisService(
         detector_checkpoint_path=str(DETECTOR_CHECKPOINT_PATH),
@@ -51,13 +50,6 @@ app = FastAPI(
 )
 
 
-@app.exception_handler(Exception)
-async def global_exception_handler(request, exc):
-    logger.exception("UNHANDLED ERROR on %s %s", request.method, request.url.path)
-    return JSONResponse(
-        status_code=500,
-        content={"detail": "Internal server error"},
-    )
 
 @app.get("/health")
 def health_check():
