@@ -710,25 +710,6 @@ The deployment demonstrates:
 - Remote model inference
 - Connecting a frontend to a cloud-hosted API
 
-### EC2 Configuration
-
-| Property | Value |
-|---|---|
-| Cloud Provider | AWS |
-| Compute | EC2 |
-| Operating System | **Linux** |
-| Instance Type | **TODO** |
-| CPU | **TODO** |
-| RAM | **TODO** |
-| Storage | **TODO** |
-| Region | **TODO** |
-| API Protocol | HTTP |
-| Backend | FastAPI |
-| Frontend | Gradio |
-
-> **TODO:** Add the final EC2 specifications.
-
----
 
 # Configuration
 
@@ -906,8 +887,8 @@ The project covers the complete path from model inference and evidence extractio
 
 **Zaki**
 
-- GitHub: [YOUR_GITHUB_USERNAME](https://github.com/zakiansari07-art)
-- LinkedIn: [YOUR_LINKEDIN_PROFILE](linkedin.com/in/zaki-ansari-b54a53194)
+- GitHub: [zakiansari07-art]
+- LinkedIn: [linkedin.com/in/zaki-ansari-b54a53194]
 
 ---
 

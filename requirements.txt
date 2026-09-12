@@ -17,3 +17,4 @@ sqlalchemy
 psycopg[binary]
 python-dotenv
 requests
+c2pa-python
