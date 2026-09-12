@@ -50,6 +50,8 @@ The demo showcases:
 ### Analysis Report
 
 ![ImageTrust Analysis Report](assets/report.png)
+![Forensic Analysis Json](assets/forensic_analysis.png)
+![Model Analysis Json](assets/model_analysis.png)
 
 > **TODO:** Add a screenshot showing the final assessment and report.
 
