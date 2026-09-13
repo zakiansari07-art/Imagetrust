@@ -24,7 +24,6 @@ env/
 *.safetensors
 checkpoints/
 notebooks/
-assets/
 
 # Logs
 *.log
