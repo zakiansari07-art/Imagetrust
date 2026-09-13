@@ -20,14 +20,14 @@ The system combines two dedicated deep-learning models with OpenCV/Pillow-based 
 
 ### Live Application
 
-**[Try ImageTrust Live →](http://13.50.14.228/)**
+**[Try ImageTrust Live →](http://13.53.217.40/)**
 
 ImageTrust is deployed on an **AWS EC2 instance** and exposed through its Gradio interface.
 
 
 ### Product Demo Video
 
-**[▶ Watch the ImageTrust Demo](YOUR_DEMO_VIDEO_URL)**
+**[▶ Watch the ImageTrust Demo](place_hplder u)**
 
 The demo showcases:
 

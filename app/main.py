@@ -16,9 +16,10 @@ from app.schemas.predictions import AnalysisResult
 from app.services.analysis_service import AnalysisService
 from app.repositories.analysis_repository import AnalysisRepository
 from app.database.database import Base, engine
+import markdown
  
 from app.database.database import SessionLocal
-from app.frontend.gradio_ui import demo
+from app.frontend.gradio_improved import demo
 import gradio as gr
 from sqlalchemy.exc import SQLAlchemyError
 import logging

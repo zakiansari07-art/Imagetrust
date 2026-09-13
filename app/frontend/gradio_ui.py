@@ -5,7 +5,7 @@ import gradio as gr
 import requests
 
 
-API_URL = "http://127.0.0.1:7860/analyze"
+API_URL = "http://127.0.0.1:7860/analyze" #change it back to 7860 after testing
 
 
 def analyze_uploaded_image(image_path: str):
