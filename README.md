@@ -40,17 +40,24 @@ The demo showcases:
 7. EXIF/XMP/C2PA analysis
 8. Automated evidence report
 
-> **TODO:** Add YouTube, Loom, or GitHub-hosted demo video.
 
 ### Interface
 
 ![ImageTrust Interface](assets/ui.png)
-
+---
 
 ### Analysis Report
 
 ![ImageTrust Analysis Report](assets/analysis_report.png)
+---
+
+### Forensic Analysis Json
+
 ![Forensic Analysis Json](assets/forensic_analysis_json.png)
+---
+
+### Model Analysis Json
+
 ![Model Analysis Json](assets/model_analysis_json.png)
 
 ---
