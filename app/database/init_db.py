@@ -1,5 +1,5 @@
-from app.database import Base, engine
-from app.db_models import AnalysisRecord  # Registers the table with Base.
+from app.database.database import Base, engine
+from app.database.db_models import AnalysisRecord  
 
 
 def main():

@@ -1,0 +1,132 @@
+{
+    "file": {
+        "file_name": "cropped_camera_image.jpg",
+        "file_size_bytes": 3083702,
+        "file_format": "JPEG"
+    },
+    "image": {
+        "width": 4000,
+        "height": 2252,
+        "channels": 3,
+        "aspect_ratio": 1.7762
+    },
+    "metadata": {
+        "original_color_mode": "RGB",
+        "has_exif_metadata": true,
+        "exif": {
+            "ImageWidth": "4000",
+            "ImageLength": "2252",
+            "ResolutionUnit": "2",
+            "ExifOffset": "226",
+            "Make": "samsung",
+            "Model": "SM-S901B",
+            "Software": "S901BXXSNGZD7",
+            "Orientation": "1",
+            "DateTime": "2026:08:22 14:48:13",
+            "YCbCrPositioning": "1",
+            "XResolution": "72.0",
+            "YResolution": "72.0"
+        }
+    },
+    "color": {
+        "mean_rgb": [
+            127.4,
+            116.0,
+            106.35
+        ],
+        "std_rgb": [
+            53.62,
+            54.41,
+            55.71
+        ],
+        "mean_saturation": 52.69,
+        "mean_brightness": 129.64
+    },
+    "quality": {
+        "sharpness_score": 220.82,
+        "blur_score": 220.82,
+        "contrast": 52.41,
+        "entropy": 7.7033
+    },
+    "noise": {
+        "noise_mean": -0.0018,
+        "noise_std": 4.6467,
+        "noise_median": 0.0,
+        "noise_mad": 2.0,
+        "noise_spatial_std": 3.5636
+    },
+    "edges": {
+        "edge_density": 0.043485,
+        "edge_mean": 11.0886
+    },
+    "frequency": {
+        "low_frequency_energy": 1345037926400.0,
+        "high_frequency_energy": 970806720.0,
+        "high_frequency_ratio": 0.039232
+    },
+    "compression": {
+        "jpeg_detected": true,
+        "estimated_jpeg_quality": 100,
+        "block_artifact_score": 1.044233,
+        "dct": {
+            "mean_low_frequency_dct_energy": 8761.625,
+            "mean_high_frequency_dct_energy": 69.974,
+            "high_frequency_dct_ratio": 0.007986
+        }
+    },
+    "ela": {
+        "applicable": true,
+        "mean_error": 1.6287,
+        "std_error": 1.3834,
+        "max_error": 27.0
+    },
+    "resampling": {
+        "resampling_score": 3.7789,
+        "interpolation_error": 2.5747
+    },
+    "double_compression": {
+        "applicable": true,
+        "double_compression_indicator": false,
+        "score": 1.0442
+    },
+    "resizing": {
+        "common_dimension_detected": false,
+        "reconstruction_error": 2.5747
+    },
+    "provenance": {
+        "exif": {
+            "present": true,
+            "fields": {
+                "ImageWidth": "4000",
+                "ImageLength": "2252",
+                "ResolutionUnit": "2",
+                "ExifOffset": "226",
+                "Make": "samsung",
+                "Model": "SM-S901B",
+                "Software": "S901BXXSNGZD7",
+                "Orientation": "1",
+                "DateTime": "2026:08:22 14:48:13",
+                "YCbCrPositioning": "1",
+                "XResolution": "72.0",
+                "YResolution": "72.0"
+            },
+            "camera": {
+                "make": "samsung",
+                "model": "SM-S901B",
+                "software": "S901BXXSNGZD7",
+                "date_time": "2026:08:22 14:48:13"
+            }
+        },
+        "xmp": {
+            "present": false,
+            "fields": {}
+        },
+        "c2pa": {
+            "available": true,
+            "present": false,
+            "verified": false,
+            "analysis_error": true,
+            "error": "ManifestNotFound: no JUMBF data found"
+        }
+    }
+}

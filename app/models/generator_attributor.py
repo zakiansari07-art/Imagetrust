@@ -4,20 +4,11 @@ import torch
 from PIL import Image
 from torchvision import transforms
 
-from models.detector import create_generator_model
+from models.detector import create_defactify_generator_model
 
 
-GENERATOR_LABELS = [
-    "real",
-    "ADM",
-    "BigGAN",
-    "GLIDE",
-    "Midjourney",
-    "SD14",
-    "SD15",
-    "VQDM",
-    "Wukong",
-]
+GENERATOR_LABELS  = ["SD21", "SDXL", "SD3", "DALLE3", "Midjourney"]
+
 
 
 class GeneratorAttributor:
@@ -33,13 +24,15 @@ class GeneratorAttributor:
             "cuda" if torch.cuda.is_available() else "cpu"
         )
 
-        self.model = create_generator_model()
+        self.model = create_defactify_generator_model()
 
         checkpoint = torch.load(
             checkpoint_path,
             map_location=self.device,
+            weights_only=True
         )
         self.model.load_state_dict(checkpoint["model_state_dict"])
+        del checkpoint
 
         self.model.to(self.device)
         self.model.eval()
@@ -64,7 +57,7 @@ class GeneratorAttributor:
 
         image_tensor = self.transform(image).unsqueeze(0).to(self.device)
 
-        with torch.no_grad():
+        with torch.inference_mode():
             logits = self.model(image_tensor)
             probabilities = torch.softmax(logits, dim=1).squeeze(0)
 
@@ -76,6 +69,9 @@ class GeneratorAttributor:
         best_index = torch.argmax(probabilities).item()
         best_label = GENERATOR_LABELS[best_index]
         confidence = probabilities[best_index].item()
+        del image_tensor
+        del logits
+        del probabilities
 
         return {
             "label": best_label,

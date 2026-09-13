@@ -28,33 +28,30 @@ def build_analysis_graph(
     forensics: ImageForensicsAnalyzer,
     llm: ReportGenerator,
     ai_threshold: float,
-    source_threshold: float
+    generator_threshold_very_high: float,
+    generator_threshold_high: float,
+    generator_threshold_medium: float,
+    generator_threshold_low: float,
+    
 ):
     def detect_real_vs_ai(state: ImageAnalysisState) -> dict:
-        start = time.perf_counter()
+        
         output = detector.predict(state["image_path"])
-        print(
-            f"Real-vs-AI detector: {time.perf_counter() - start:.2f}s",
-            flush=True,
-        )
+       
+        
         return {"detector_raw": output}
 
     def attribute_generator(state: ImageAnalysisState) -> dict:
-        start = time.perf_counter()
+        
         output = attributor.predict(state["image_path"])
-        print(
-            f"Generator attributor: {time.perf_counter() - start:.2f}s",
-            flush=True,
-        )
+        
+        
         return {"attribution_raw": output}
 
     def analyze_forensics(state: ImageAnalysisState) -> dict:
-        start = time.perf_counter()
+       
         output = forensics.analyze(state["image_path"])
-        print(
-            f"Forensics analyzer: {time.perf_counter() - start:.2f}s",
-            flush=True,
-        )
+        
         return {"forensics_raw": output}
 
     def decide_result(state: ImageAnalysisState) -> dict:
@@ -66,80 +63,115 @@ def build_analysis_graph(
             **state["forensics_raw"]
         )
 
+        
         ai_probability = detector_result.probabilities["ai_generated"]
         real_probability = detector_result.probabilities["real"]
+        generator_probability = attribution_result.confidence
 
-        source_is_known_ai = attribution_result.label != "real"
-        source_is_confident = (
-            attribution_result.confidence >= source_threshold
-        )
+        
+        
 
         if ai_probability >= ai_threshold:
-            if source_is_known_ai and source_is_confident:
+            detector_result.label = "ai-generated"
+            if generator_probability >= generator_threshold_very_high:
                 result = AnalysisResult(
                     verdict="likely_ai_generated",
                     confidence=ai_probability,
-                    source_status="identified",
+                    confidence_level="Very_High",
                     likely_generator=attribution_result.label,
                     generator_confidence=attribution_result.confidence,
                     explanation=(
-                        "The AI detector found strong AI-generation evidence. "
-                        f"The closest supported source is "
-                        f"{attribution_result.label}."
+                        "The AI detector found AI-generation evidence."
+                        f" The closest supported source is "
+                        f"{attribution_result.label} with very high confidence."
                     ),
                     real_vs_ai=detector_result,
                     generator_attribution=attribution_result,
                     forensics=forensics_result,
                 )
-            else:
+
+            elif generator_probability >= generator_threshold_high:
                 result = AnalysisResult(
                     verdict="likely_ai_generated",
                     confidence=ai_probability,
-                    source_status="unknown",
-                    likely_generator=None,
-                    generator_confidence=None,
+                    confidence_level="High",
+                    likely_generator=attribution_result.label,
+                    generator_confidence=attribution_result.confidence,
                     explanation=(
-                        "The AI detector found strong AI-generation evidence, "
-                        "but no supported generator matched confidently."
+                        "The AI detector found AI-generation evidence."
+                        f" The closest supported source is "
+                        f"{attribution_result.label} with high confidence."
                     ),
                     real_vs_ai=detector_result,
                     generator_attribution=attribution_result,
-                    forensics=forensics_result,
-                )
+                    forensics=forensics_result)
 
-        elif (
-            real_probability >= ai_threshold
-            and attribution_result.label == "real"
-        ):
+            elif generator_probability >= generator_threshold_medium:
+                    result = AnalysisResult(
+                        verdict="likely_ai_generated",
+                        confidence=ai_probability,
+                        confidence_level="Medium",
+                        likely_generator=attribution_result.label,
+                        generator_confidence=attribution_result.confidence,
+                        explanation=(
+                            "The AI detector found AI-generation evidence."
+                            f" The closest supported source is "
+                            f"{attribution_result.label} with medium confidence."
+                        ),
+                        real_vs_ai=detector_result,
+                        generator_attribution=attribution_result,
+                        forensics=forensics_result)
+
+            elif generator_probability >= generator_threshold_low:
+                    result = AnalysisResult(
+                        verdict="likely_ai_generated",
+                        confidence=ai_probability,
+                        confidence_level="Low",
+                        likely_generator=attribution_result.label,
+                        generator_confidence=attribution_result.confidence,
+                        explanation=(
+                            "The AI detector found AI-generation evidence."
+                            f" The closest supported source is "
+                            f"{attribution_result.label} with low confidence."
+                        ),
+                        real_vs_ai=detector_result,
+                        generator_attribution=attribution_result,
+                        forensics=forensics_result)
+
+
+
+            else:
+                detector_result.label = "real"
+                result = AnalysisResult(
+                        verdict="likely_ai_generated",
+                        confidence=ai_probability,
+                        confidence_level="Very_Low",
+                        likely_generator=attribution_result.label,
+                        generator_confidence=attribution_result.confidence,
+                        explanation=(
+                            "The AI detector found AI-generation evidence."
+                            f" The closest supported source is "
+                            f"{attribution_result.label} with very low confidence."
+                        ),
+                        real_vs_ai=detector_result,
+                        generator_attribution=attribution_result,
+                        forensics=forensics_result)
+
+        else:
+            
             result = AnalysisResult(
                 verdict="likely_real",
                 confidence=real_probability,
-                source_status="not_applicable",
+                confidence_level="not_applicable",
                 likely_generator=None,
                 generator_confidence=None,
-                explanation=(
-                    "Both models indicate that this image is likely real."
-                ),
+                explanation=(" The AI detector found no AI-generation evidence."),
                 real_vs_ai=detector_result,
                 generator_attribution=attribution_result,
                 forensics=forensics_result,
             )
 
-        else:
-            result = AnalysisResult(
-                verdict="uncertain",
-                confidence=None,
-                source_status="unknown",
-                likely_generator=None,
-                generator_confidence=None,
-                explanation=(
-                    "The models do not agree strongly enough to make a "
-                    "reliable conclusion."
-                ),
-                real_vs_ai=detector_result,
-                generator_attribution=attribution_result,
-                forensics=forensics_result,
-            )
+    
 
         return {"result": result}
 
@@ -148,7 +180,7 @@ def build_analysis_graph(
     def generate_report(state: ImageAnalysisState) -> dict:
         result = state["result"]
         analysis_data = result.model_dump(mode="json")
-        start = time.perf_counter()
+        
 
         try:
             report = llm.generate(analysis_data=analysis_data)
@@ -156,10 +188,7 @@ def build_analysis_graph(
             # The deterministic model result remains usable if the LLM fails.
             report = None
 
-        print(
-            f"LLM report: {time.perf_counter() - start:.2f}s",
-            flush=True,
-        )
+       
 
         updated_result = result.model_copy(
             update={"llm_report": report}
@@ -171,17 +200,85 @@ def build_analysis_graph(
 
     workflow = StateGraph(ImageAnalysisState)
 
-    workflow.add_node("detect_real_vs_ai", detect_real_vs_ai)
-    workflow.add_node("attribute_generator", attribute_generator)
-    workflow.add_node("analyze_forensics", analyze_forensics)
-    workflow.add_node("decide_result", decide_result)
-    workflow.add_node("report", generate_report)
+    workflow.add_node(
+        "detect_real_vs_ai",
+        detect_real_vs_ai
+    )
 
-    workflow.add_edge(START, "detect_real_vs_ai")
-    workflow.add_edge("detect_real_vs_ai", "attribute_generator")
-    workflow.add_edge("attribute_generator", "analyze_forensics")
-    workflow.add_edge("analyze_forensics", "decide_result")
-    workflow.add_edge("decide_result", "report")
-    workflow.add_edge("report", END)
+    workflow.add_node(
+        "attribute_generator",
+        attribute_generator
+    )
+
+    workflow.add_node(
+        "analyze_forensics",
+        analyze_forensics
+    )
+
+    workflow.add_node(
+        "decide_result",
+        decide_result
+    )
+
+    workflow.add_node(
+        "report",
+        generate_report
+    )
+
+
+    # ------------------------------------------------------------
+    # START
+    # ------------------------------------------------------------
+
+    workflow.add_edge(
+        START,
+        "detect_real_vs_ai"
+    )
+
+    workflow.add_edge(
+        START,
+        "attribute_generator"
+    )
+
+    workflow.add_edge(
+        START,
+        "analyze_forensics"
+    )
+
+
+    # ------------------------------------------------------------
+    # ALL THREE → DECISION
+    # ------------------------------------------------------------
+
+    workflow.add_edge(
+        "detect_real_vs_ai",
+        "decide_result"
+    )
+
+    workflow.add_edge(
+        "attribute_generator",
+        "decide_result"
+    )
+
+    workflow.add_edge(
+        "analyze_forensics",
+        "decide_result"
+    )
+
+
+    # ------------------------------------------------------------
+    # DECISION → LLM
+    # ------------------------------------------------------------
+
+    workflow.add_edge(
+        "decide_result",
+        "report"
+    )
+
+    workflow.add_edge(
+        "report",
+        END
+    )
+
 
     return workflow.compile()

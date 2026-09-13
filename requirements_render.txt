@@ -1,0 +1,20 @@
+numpy
+langgraph
+langchain-core
+langchain-openai
+pydantic
+gradio==5.49.1
+fastapi
+uvicorn[standard]
+python-multipart
+Pillow
+opencv-python
+sqlalchemy
+psycopg[binary]
+python-dotenv
+requests
+c2pa-python
+markdown
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.11.0
+torchvision==0.26.0

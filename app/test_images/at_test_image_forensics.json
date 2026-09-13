@@ -1,0 +1,128 @@
+{
+    "file": {
+        "file_name": "at_test_image.png",
+        "file_size_bytes": 2327462,
+        "file_format": "PNG"
+    },
+    "image": {
+        "width": 1536,
+        "height": 1024,
+        "channels": 3,
+        "aspect_ratio": 1.5
+    },
+    "metadata": {
+        "original_color_mode": "RGB",
+        "has_exif_metadata": false,
+        "exif": {}
+    },
+    "color": {
+        "mean_rgb": [
+            60.59,
+            65.91,
+            69.66
+        ],
+        "std_rgb": [
+            57.67,
+            58.74,
+            59.6
+        ],
+        "mean_saturation": 50.94,
+        "mean_brightness": 70.64
+    },
+    "quality": {
+        "sharpness_score": 679.01,
+        "blur_score": 679.01,
+        "contrast": 58.39,
+        "entropy": 7.3536
+    },
+    "noise": {
+        "noise_mean": -0.0002,
+        "noise_std": 7.9289,
+        "noise_median": 0.0,
+        "noise_mad": 1.0,
+        "noise_spatial_std": 7.0952
+    },
+    "edges": {
+        "edge_density": 0.058572,
+        "edge_mean": 14.9359
+    },
+    "frequency": {
+        "low_frequency_energy": 239982264320.0,
+        "high_frequency_energy": 345211328.0,
+        "high_frequency_ratio": 0.064364
+    },
+    "compression": {
+        "jpeg_detected": false,
+        "estimated_jpeg_quality": null,
+        "block_artifact_score": 0.951815,
+        "dct": {
+            "mean_low_frequency_dct_energy": 14189.5977,
+            "mean_high_frequency_dct_energy": 199.4656,
+            "high_frequency_dct_ratio": 0.014057
+        }
+    },
+    "ela": {
+        "applicable": false,
+        "mean_error": null,
+        "std_error": null,
+        "max_error": null
+    },
+    "resampling": {
+        "resampling_score": 4.4272,
+        "interpolation_error": 3.3347
+    },
+    "double_compression": {
+        "applicable": false,
+        "double_compression_indicator": false,
+        "score": null
+    },
+    "resizing": {
+        "common_dimension_detected": true,
+        "reconstruction_error": 3.3347
+    },
+    "provenance": {
+        "exif": {
+            "present": false,
+            "fields": {}
+        },
+        "xmp": {
+            "present": false,
+            "fields": {}
+        },
+        "c2pa": {
+            "available": true,
+            "present": true,
+            "verified": "Valid",
+            "validation_results": "{'activeManifest': {'success': [{'code': 'timeStamp.validated', 'url': 'self#jumbf=/c2pa/urn:c2pa:19dd6a90-53d9-4bb5-bb0b-b0f122b2fdd0/c2pa.signature', 'explanation': 'timestamp message digest matched: OpenAI TSA Leaf'}, {'code': 'claimSignature.insideValidity', 'url': 'self#jumbf=/c2pa/urn:c2pa:19dd6a90-53d9-4bb5-bb0b-b0f122b2fdd0/c2pa.signature', 'explanation': 'claim signature valid'}, {'code': 'claimSignature.validated', 'url': 'self#jumbf=/c2pa/urn:c2pa:19dd6a90-53d9-4bb5-bb0b-b0f122b2fdd0/c2pa.signature', 'explanation': 'claim signature valid'}, {'code': 'assertion.hashedURI.match', 'url': 'self#jumbf=/c2pa/urn:c2pa:19dd6a90-53d9-4bb5-bb0b-b0f122b2fdd0/c2pa.assertions/c2pa.icon', 'explanation': 'hashed uri matched: self#jumbf=c2pa.assertions/c2pa.icon'}, {'code': 'assertion.hashedURI.match', 'url': 'self#jumbf=/c2pa/urn:c2pa:19dd6a90-53d9-4bb5-bb0b-b0f122b2fdd0/c2pa.assertions/c2pa.actions.v2', 'explanation': 'hashed uri matched: self#jumbf=c2pa.assertions/c2pa.actions.v2'}, {'code': 'assertion.hashedURI.match', 'url': 'self#jumbf=/c2pa/urn:c2pa:19dd6a90-53d9-4bb5-bb0b-b0f122b2fdd0/c2pa.assertions/c2pa.hash.data', 'explanation': 'hashed uri matched: self#jumbf=c2pa.assertions/c2pa.hash.data'}, {'code': 'assertion.dataHash.match', 'url': 'self#jumbf=/c2pa/urn:c2pa:19dd6a90-53d9-4bb5-bb0b-b0f122b2fdd0/c2pa.assertions/c2pa.hash.data', 'explanation': 'data hash valid'}], 'informational': [{'code': 'timeStamp.untrusted', 'url': 'self#jumbf=/c2pa/urn:c2pa:19dd6a90-53d9-4bb5-bb0b-b0f122b2fdd0/c2pa.signature', 'explanation': 'timestamp cert untrusted: OpenAI TSA Leaf'}], 'failure': [{'code': 'signingCredential.untrusted', 'url': 'self#jumbf=/c2pa/urn:c2pa:19dd6a90-53d9-4bb5-bb0b-b0f122b2fdd0/c2pa.signature', 'explanation': 'signing certificate untrusted'}]}}",
+            "active_manifest": "urn:c2pa:19dd6a90-53d9-4bb5-bb0b-b0f122b2fdd0",
+            "manifests": [
+                {
+                    "manifest_id": "urn:c2pa:19dd6a90-53d9-4bb5-bb0b-b0f122b2fdd0",
+                    "title": "image.png",
+                    "format": null,
+                    "claim_generator": null,
+                    "signature": {
+                        "issuer": "OpenAI OpCo, LLC",
+                        "time": "2026-09-08T07:22:38.444139+00:00",
+                        "algorithm": "Es256"
+                    },
+                    "actions": [],
+                    "ingredients": []
+                }
+            ],
+            "active_manifest_summary": {
+                "manifest_id": "urn:c2pa:19dd6a90-53d9-4bb5-bb0b-b0f122b2fdd0",
+                "title": "image.png",
+                "format": null,
+                "claim_generator": null,
+                "signature": {
+                    "issuer": "OpenAI OpCo, LLC",
+                    "time": "2026-09-08T07:22:38.444139+00:00",
+                    "algorithm": "Es256"
+                },
+                "actions": [],
+                "ingredients": []
+            }
+        }
+    }
+}

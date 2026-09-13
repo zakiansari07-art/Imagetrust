@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+print(PROJECT_ROOT)
 
 load_dotenv(PROJECT_ROOT / ".env")
 
@@ -12,15 +13,15 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 DETECTOR_CHECKPOINT_PATH = (
     PROJECT_ROOT
     / "models"
-    / "checkpoint"
-    / "resnet_18_ai_detector_best.pth"
+    / "best_models_checkpoint"
+    / "bin_task_defactify_best_validation.pth"
 )
 
 ATTRIBUTOR_CHECKPOINT_PATH = (
     PROJECT_ROOT
     / "models"
-    / "checkpoint"
-    / "gen_model_lr_rate_change_best_validation.pth"
+    / "best_models_checkpoint"
+    / "multi_task_defactify_last_checkpoint.pth"
 )
 
 

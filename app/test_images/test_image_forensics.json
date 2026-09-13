@@ -1,0 +1,100 @@
+{
+    "file": {
+        "file_name": "test_image.jpeg",
+        "file_size_bytes": 29273,
+        "file_format": "JPEG"
+    },
+    "image": {
+        "width": 486,
+        "height": 631,
+        "channels": 3,
+        "aspect_ratio": 0.7702
+    },
+    "metadata": {
+        "original_color_mode": "RGB",
+        "has_exif_metadata": false,
+        "exif": {}
+    },
+    "color": {
+        "mean_rgb": [
+            108.67,
+            108.67,
+            108.67
+        ],
+        "std_rgb": [
+            51.92,
+            51.92,
+            51.92
+        ],
+        "mean_saturation": 0.0,
+        "mean_brightness": 108.67
+    },
+    "quality": {
+        "sharpness_score": 285.65,
+        "blur_score": 285.65,
+        "contrast": 51.92,
+        "entropy": 7.6268
+    },
+    "noise": {
+        "noise_mean": -0.0023,
+        "noise_std": 5.205,
+        "noise_median": 0.0,
+        "noise_mad": 1.0,
+        "noise_spatial_std": 4.2393
+    },
+    "edges": {
+        "edge_density": 0.060535,
+        "edge_mean": 15.4364
+    },
+    "frequency": {
+        "low_frequency_energy": 32679702528.0,
+        "high_frequency_energy": 37086180.0,
+        "high_frequency_ratio": 0.044867
+    },
+    "compression": {
+        "jpeg_detected": true,
+        "estimated_jpeg_quality": 100,
+        "block_artifact_score": 1.398945,
+        "dct": {
+            "mean_low_frequency_dct_energy": 12055.4355,
+            "mean_high_frequency_dct_energy": 33.149,
+            "high_frequency_dct_ratio": 0.00275
+        }
+    },
+    "ela": {
+        "applicable": true,
+        "mean_error": 0.215,
+        "std_error": 0.4268,
+        "max_error": 6.0
+    },
+    "resampling": {
+        "resampling_score": 3.5345,
+        "interpolation_error": 3.4836
+    },
+    "double_compression": {
+        "applicable": true,
+        "double_compression_indicator": false,
+        "score": 1.3989
+    },
+    "resizing": {
+        "common_dimension_detected": false,
+        "reconstruction_error": 3.4836
+    },
+    "provenance": {
+        "exif": {
+            "present": false,
+            "fields": {}
+        },
+        "xmp": {
+            "present": false,
+            "fields": {}
+        },
+        "c2pa": {
+            "available": true,
+            "present": false,
+            "verified": false,
+            "analysis_error": true,
+            "error": "ManifestNotFound: no JUMBF data found"
+        }
+    }
+}
