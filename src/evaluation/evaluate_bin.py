@@ -1,3 +1,4 @@
+
 import json
 import csv
 from pathlib import Path
@@ -5,6 +6,8 @@ from datetime import datetime
 
 import numpy as np
 import torch
+import matplotlib.pyplot as plt
+
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -12,25 +15,47 @@ from sklearn.metrics import (
     confusion_matrix,
     f1_score,
     roc_auc_score,
+    roc_curve,
     classification_report,
+    ConfusionMatrixDisplay,
 )
+
 from data.dataloader_defactify import create_binary_task_eval_dataloader
 from models.detector import create_model
 
 
-CHECKPOINT_NAME = "models/checkpoint/bin_task_defactify_best_validation.pth"
+# =========================================================
+# Configuration
+# =========================================================
+
+CHECKPOINT_NAME = (
+    "models/checkpoint/bin_task_defactify_best_validation.pth"
+)
 
 RESULTS_DIR = Path(
     "src/evaluation/evaluation_results"
 )
+
+HISTORY_FILE = (
+    RESULTS_DIR / "evaluation_history_defactify.csv"
+)
+
+THRESHOLD = 0.5
+
+
+# =========================================================
+# Create results directory
+# =========================================================
 
 RESULTS_DIR.mkdir(
     parents=True,
     exist_ok=True
 )
 
-HISTORY_FILE = RESULTS_DIR / "evaluation_history_defactify.csv"
 
+# =========================================================
+# Evaluation
+# =========================================================
 
 def evaluate():
 
@@ -54,6 +79,8 @@ def evaluate():
     # 2. Load model
     # ---------------------------------------------------------
 
+    print("\nLoading model...")
+
     model = create_model()
 
     checkpoint = torch.load(
@@ -68,11 +95,15 @@ def evaluate():
     model.to(device)
     model.eval()
 
+    print("Checkpoint loaded:", CHECKPOINT_NAME)
+
     # ---------------------------------------------------------
-    # 3. Create validation dataloader
+    # 3. Create validation/test dataloaders
     # ---------------------------------------------------------
 
-    validation_dataloader, test_dataloader = create_binary_task_eval_dataloader()
+    validation_dataloader, test_dataloader = (
+        create_binary_task_eval_dataloader()
+    )
 
     # ---------------------------------------------------------
     # 4. Store predictions
@@ -82,11 +113,11 @@ def evaluate():
     all_predictions = []
     all_probabilities = []
 
-    threshold = 0.5
-
     # ---------------------------------------------------------
     # 5. Run evaluation
     # ---------------------------------------------------------
+
+    print("\nRunning evaluation...")
 
     with torch.no_grad():
 
@@ -97,7 +128,7 @@ def evaluate():
             # Labels don't need to be on GPU
             labels = labels.numpy()
 
-            # Model prediction
+            # Model output
             logits = model(images)
 
             # Convert [batch_size, 1]
@@ -107,13 +138,15 @@ def evaluate():
             # Convert logits to probabilities
             probabilities = torch.sigmoid(logits)
 
-            # Convert probabilities to predictions
+            # Convert probabilities to binary predictions
             predictions = (
-                probabilities >= threshold
+                probabilities >= THRESHOLD
             ).float()
 
             # Store results
-            all_labels.extend(labels)
+            all_labels.extend(
+                labels
+            )
 
             all_probabilities.extend(
                 probabilities.cpu().numpy()
@@ -127,9 +160,17 @@ def evaluate():
     # 6. Convert results to NumPy arrays
     # ---------------------------------------------------------
 
-    all_labels = np.array(all_labels)
-    all_predictions = np.array(all_predictions)
-    all_probabilities = np.array(all_probabilities)
+    all_labels = np.array(
+        all_labels
+    ).astype(int)
+
+    all_predictions = np.array(
+        all_predictions
+    ).astype(int)
+
+    all_probabilities = np.array(
+        all_probabilities
+    )
 
     print(
         "\nNumber of samples:",
@@ -217,7 +258,10 @@ def evaluate():
     report = classification_report(
         all_labels,
         all_predictions,
-        target_names=["Real", "Fake"],
+        target_names=[
+            "Real",
+            "Fake"
+        ],
         output_dict=True,
         zero_division=0
     )
@@ -237,42 +281,238 @@ def evaluate():
         f"{timestamp.strftime('%Y-%m-%d_%H-%M-%S')}"
     )
 
-    run_dir = RESULTS_DIR / run_name
+    run_dir = (
+        RESULTS_DIR / run_name
+    )
 
     run_dir.mkdir(
         parents=True,
         exist_ok=True
     )
 
-    # ---------------------------------------------------------
-    # 12. Create metrics dictionary
-    # ---------------------------------------------------------
+    print(
+        "\nSaving results to:",
+        run_dir
+    )
+
+    # =========================================================
+    # 12. Save ROC curve
+    # =========================================================
+
+    roc_curve_file = None
+
+    if len(np.unique(all_labels)) == 2:
+
+        fpr, tpr, thresholds = roc_curve(
+            all_labels,
+            all_probabilities
+        )
+
+        roc_curve_file = (
+            run_dir / "roc_curve.png"
+        )
+
+        plt.figure(
+            figsize=(8, 6)
+        )
+
+        plt.plot(
+            fpr,
+            tpr,
+            label=f"ROC curve (AUC = {roc_auc:.4f})"
+        )
+
+        plt.plot(
+            [0, 1],
+            [0, 1],
+            linestyle="--",
+            label="Random classifier"
+        )
+
+        plt.xlabel(
+            "False Positive Rate"
+        )
+
+        plt.ylabel(
+            "True Positive Rate"
+        )
+
+        plt.title(
+            "ROC Curve - Real vs AI Generated"
+        )
+
+        plt.legend(
+            loc="lower right"
+        )
+
+        plt.grid(True)
+
+        plt.tight_layout()
+
+        plt.savefig(
+            roc_curve_file,
+            dpi=300,
+            bbox_inches="tight"
+        )
+
+        plt.close()
+
+        print(
+            "ROC curve saved:",
+            roc_curve_file
+        )
+
+    # =========================================================
+    # 13. Save confusion matrix image
+    # =========================================================
+
+    confusion_matrix_file = (
+        run_dir / "confusion_matrix.png"
+    )
+
+    display = ConfusionMatrixDisplay(
+        confusion_matrix=cn_matrix,
+        display_labels=[
+            "Real",
+            "Fake"
+        ]
+    )
+
+    fig, ax = plt.subplots(
+        figsize=(7, 6)
+    )
+
+    display.plot(
+        ax=ax,
+        values_format="d"
+    )
+
+    ax.set_title(
+        "Confusion Matrix - Real vs AI Generated"
+    )
+
+    plt.tight_layout()
+
+    plt.savefig(
+        confusion_matrix_file,
+        dpi=300,
+        bbox_inches="tight"
+    )
+
+    plt.close()
+
+    print(
+        "Confusion matrix saved:",
+        confusion_matrix_file
+    )
+
+    # =========================================================
+    # 14. Save predictions CSV
+    # =========================================================
+
+    predictions_file = (
+        run_dir / "predictions.csv"
+    )
+
+    with open(
+        predictions_file,
+        "w",
+        newline=""
+    ) as f:
+
+        writer = csv.writer(f)
+
+        writer.writerow([
+            "true_label",
+            "true_class",
+            "predicted_label",
+            "predicted_class",
+            "fake_probability"
+        ])
+
+        for true_label, prediction, probability in zip(
+            all_labels,
+            all_predictions,
+            all_probabilities
+        ):
+
+            true_class = (
+                "Real"
+                if true_label == 0
+                else "Fake"
+            )
+
+            predicted_class = (
+                "Real"
+                if prediction == 0
+                else "Fake"
+            )
+
+            writer.writerow([
+                int(true_label),
+                true_class,
+                int(prediction),
+                predicted_class,
+                float(probability)
+            ])
+
+    print(
+        "Predictions saved:",
+        predictions_file
+    )
+
+    # =========================================================
+    # 15. Create metrics dictionary
+    # =========================================================
 
     metrics = {
+
         "timestamp": timestamp.isoformat(
             timespec="seconds"
         ),
+
         "checkpoint": CHECKPOINT_NAME,
+
         "device": str(device),
-        "threshold": threshold,
+
+        "threshold": THRESHOLD,
+
         "num_samples": len(all_labels),
-        "accuracy": float(accuracy),
-        "precision": float(precision),
-        "recall": float(recall),
-        "f1": float(f1),
+
+        "accuracy": float(
+            accuracy
+        ),
+
+        "precision": float(
+            precision
+        ),
+
+        "recall": float(
+            recall
+        ),
+
+        "f1": float(
+            f1
+        ),
+
         "roc_auc": (
             float(roc_auc)
             if roc_auc is not None
             else None
         ),
-        "confusion_matrix": cn_matrix.tolist()
+
+        "confusion_matrix": (
+            cn_matrix.tolist()
+        )
     }
 
-    # ---------------------------------------------------------
-    # 13. Save metrics as JSON
-    # ---------------------------------------------------------
+    # =========================================================
+    # 16. Save metrics JSON
+    # =========================================================
 
-    metrics_file = run_dir / "metrics.json"
+    metrics_file = (
+        run_dir / "metrics.json"
+    )
 
     with open(
         metrics_file,
@@ -285,16 +525,21 @@ def evaluate():
             indent=4
         )
 
-    # ---------------------------------------------------------
-    # 14. Save confusion matrix
-    # ---------------------------------------------------------
+    print(
+        "Metrics saved:",
+        metrics_file
+    )
 
-    confusion_matrix_file = (
+    # =========================================================
+    # 17. Save confusion matrix JSON
+    # =========================================================
+
+    confusion_matrix_json_file = (
         run_dir / "confusion_matrix.json"
     )
 
     with open(
-        confusion_matrix_file,
+        confusion_matrix_json_file,
         "w"
     ) as f:
 
@@ -304,9 +549,14 @@ def evaluate():
             indent=4
         )
 
-    # ---------------------------------------------------------
-    # 15. Save classification report
-    # ---------------------------------------------------------
+    print(
+        "Confusion matrix JSON saved:",
+        confusion_matrix_json_file
+    )
+
+    # =========================================================
+    # 18. Save classification report
+    # =========================================================
 
     report_file = (
         run_dir / "classification_report.json"
@@ -323,11 +573,18 @@ def evaluate():
             indent=4
         )
 
-    # ---------------------------------------------------------
-    # 16. Append results to evaluation history
-    # ---------------------------------------------------------
+    print(
+        "Classification report saved:",
+        report_file
+    )
 
-    history_exists = HISTORY_FILE.exists()
+    # =========================================================
+    # 19. Append results to evaluation history
+    # =========================================================
+
+    history_exists = (
+        HISTORY_FILE.exists()
+    )
 
     history_fields = [
         "timestamp",
@@ -353,21 +610,21 @@ def evaluate():
             fieldnames=history_fields
         )
 
-        # Only write header for a new CSV
         if not history_exists:
             writer.writeheader()
 
-        # Only put history fields into CSV
         history_metrics = {
             field: metrics[field]
             for field in history_fields
         }
 
-        writer.writerow(history_metrics)
+        writer.writerow(
+            history_metrics
+        )
 
-    # ---------------------------------------------------------
-    # 17. Print results
-    # ---------------------------------------------------------
+    # =========================================================
+    # 20. Print results
+    # =========================================================
 
     print("\nEvaluation Results")
     print("------------------")
@@ -401,32 +658,62 @@ def evaluate():
             "(only one class present)"
         )
 
+    # =========================================================
+    # 21. Print confusion matrix
+    # =========================================================
+
     print("\nConfusion Matrix:")
+
     print(cn_matrix)
 
-    print("\nClassification Report:")
+    # =========================================================
+    # 22. Print classification report
+    # =========================================================
+
+    print(
+        "\nClassification Report:"
+    )
 
     print(
         classification_report(
             all_labels,
             all_predictions,
-            target_names=["Real", "Fake"],
+            target_names=[
+                "Real",
+                "Fake"
+            ],
             zero_division=0
         )
     )
 
-    # ---------------------------------------------------------
-    # 18. Print saved locations
-    # ---------------------------------------------------------
+    # =========================================================
+    # 23. Print saved locations
+    # =========================================================
 
     print(
-        f"\nResults saved to:\n{run_dir}"
+        "\nResults saved to:"
     )
+
+    print(run_dir)
 
     print(
-        f"History saved to:\n{HISTORY_FILE}"
+        "\nHistory saved to:"
     )
 
+    print(HISTORY_FILE)
+
+    print("\nGenerated files:")
+
+    for file in sorted(run_dir.iterdir()):
+
+        print(
+            f"  - {file.name}"
+        )
+
+
+# =========================================================
+# Main
+# =========================================================
 
 if __name__ == "__main__":
     evaluate()

@@ -9,9 +9,9 @@ The system combines two dedicated deep-learning models with OpenCV/Pillow-based 
 > **ImageTrust is an evidence-based analysis tool, not an absolute authenticity verifier.**
 
 <p align="center">
-  <a href="http://13.50.14.228/"><strong>Live Demo →</strong></a>
+  <a href="http://13.53.217.40/"><strong>Live Demo →</strong></a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
-  <a href="http://13.50.14.228/"><strong>Watch Demo Video →</strong></a>
+  <a href="https://youtu.be/qlTO-ERLtf4"><strong>Watch Demo Video →</strong></a>
 </p>
 
 ---
@@ -27,7 +27,7 @@ ImageTrust is deployed on an **AWS EC2 instance** and exposed through its Gradio
 
 ### Product Demo Video
 
-**[▶ Watch the ImageTrust Demo](place_hplder u)**
+**[▶ Watch the ImageTrust Demo](https://youtu.be/qlTO-ERLtf4)**
 
 The demo showcases:
 
@@ -44,16 +44,14 @@ The demo showcases:
 
 ### Interface
 
-![ImageTrust Interface](assets/interface.png)
+![ImageTrust Interface](assets/ui.png)
 
 
 ### Analysis Report
 
-![ImageTrust Analysis Report](assets/report.png)
-![Forensic Analysis Json](assets/forensic_analysis.png)
-![Model Analysis Json](assets/model_analysis.png)
-
-> **TODO:** Add a screenshot showing the final assessment and report.
+![ImageTrust Analysis Report](assets/analysis_report.png)
+![Forensic Analysis Json](assets/forensic_analysis_json.png)
+![Model Analysis Json](assets/model_analysis_json.png)
 
 ---
 
@@ -386,19 +384,16 @@ AI-Generated
 | F1 Score | **0.9447** |
 | ROC-AUC | **0.9769** |
 
-> **TODO:** Replace these values with the final held-out test-set results.
 
 ### Confusion Matrix
 
-![Real vs AI Confusion Matrix](assets/real-ai-confusion-matrix.png)
+![Real vs AI ROC Curve](assets/real-ai-confusion-matrix.png)
 
-> **TODO:** Add the final confusion matrix.
 
 ### ROC Curve
 
-![Real vs AI ROC Curve](assets/real-ai-roc.png)
+![Real vs AI ROC Curve](assets/real-ai-roc-curve.png)
 
-> **TODO:** Add the final ROC curve.
 
 
 ---
@@ -412,19 +407,10 @@ The attribution model was evaluated using a **one-vs-rest** approach for each ge
 
 This evaluation measures how effectively the attribution model distinguishes each generator from all other supported generators.
 
-| Generator | Accuracy | Precision | Recall | F1 | ROC-AUC |
-|---|---:|---:|---:|---:|---:|
-| **SD 2.1** | 92.54% | 84.02% | 77.41% | 80.58% | 96.97% |
-| **SDXL** | 95.06% | 87.54% | 87.77% | 87.66% | 98.55% |
-| **SD 3** | 95.08% | 93.45% | 81.09% | 86.84% | 98.35% |
-| **DALL·E 3** | **96.49%** | **97.13%** | 84.97% | **90.65%** | **99.10%** |
-| **Midjourney** | 92.06% | 72.61% | **96.83%** | 82.99% | 98.55% |
-
 ### Generator Performance Chart
 
 ![Generator Attribution Performance](assets/generator-performance.png)
 
-> **TODO:** Add a bar chart showing F1 score or another selected metric per generator.
 
 ---
 
@@ -439,9 +425,6 @@ Each matrix evaluates one generator against **all other generators**.
 | **Other Generators** | True Negative (TN) | False Positive (FP) |
 | **This Generator** | False Negative (FN) | True Positive (TP) |
 
-![Generator Attribution Confusion Matrices](assets/generator-confusion-matrices.png)
-
-> **TODO:** Add the combined confusion-matrix visualization.
 
 <details>
 <summary>View individual confusion matrices</summary>
